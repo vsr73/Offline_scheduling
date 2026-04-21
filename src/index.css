@@ -577,68 +577,129 @@ body { min-height: 100vh; background: #f3f4f6; }
 .util-pct-overall { color: #1a56db; }
 
 /* ── Home page ───────────────────────────────── */
+.home-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 20px 64px;
+  gap: 40px;
+}
+
 .home-hero {
   text-align: center;
-  padding: 8px 0 4px;
+  max-width: 560px;
+}
+
+.home-hero-eyebrow {
+  display: inline-block;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
 }
 
 .home-title {
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 800;
-  color: #111827;
-  letter-spacing: -.5px;
+  color: #0f172a;
+  letter-spacing: -.6px;
+  line-height: 1.2;
 }
 
 .home-sub {
-  margin-top: 8px;
+  margin-top: 12px;
   color: #6b7280;
-  font-size: .95rem;
+  font-size: .9rem;
+  line-height: 1.7;
 }
 
 .home-cards {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 680px;
-  margin: 0 auto;
+  gap: 16px;
   width: 100%;
+  max-width: 760px;
 }
 
 .home-card {
   background: #fff;
   border: 1px solid #e5e7eb;
+  border-left: 4px solid var(--accent);
   border-radius: 14px;
-  padding: 24px;
+  padding: 24px 28px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  gap: 24px;
   box-shadow: 0 1px 4px rgba(0,0,0,.05);
-  transition: box-shadow .15s ease, transform .15s ease;
+  transition: box-shadow .18s ease, transform .18s ease;
 }
 
 .home-card:hover {
-  box-shadow: 0 6px 24px rgba(0,0,0,.09);
+  box-shadow: 0 8px 28px rgba(0,0,0,.1);
   transform: translateY(-2px);
 }
 
-.home-card-top {
+.home-card-left {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 20px;
+  flex: 1;
+  min-width: 0;
+}
+
+.home-card-num {
+  font-size: 1.6rem;
+  font-weight: 800;
+  border: 2px solid;
+  border-radius: 10px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -.5px;
+}
+
+.home-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.home-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.home-card-meta {
+  margin-bottom: 4px;
 }
 
 .home-type-badge {
   border: 1px solid;
   border-radius: 20px;
-  padding: 3px 12px;
-  font-size: .75rem;
+  padding: 2px 10px;
+  font-size: .7rem;
   font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 
 .home-card-title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #111827;
+  color: #0f172a;
+  margin: 0;
 }
 
 .home-algo-list {
@@ -646,38 +707,65 @@ body { min-height: 100vh; background: #f3f4f6; }
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7px;
 }
 
 .home-algo-list li {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: .8rem;
+  font-size: .78rem;
   font-weight: 600;
-  color: #1d4ed8;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
+  border: 1px solid;
   border-radius: 20px;
-  padding: 4px 12px;
+  padding: 3px 11px;
 }
 
 .home-algo-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #1a56db;
   flex-shrink: 0;
 }
 
-.home-card-desc {
-  font-size: .83rem;
-  color: #6b7280;
-  line-height: 1.6;
-  flex: 1;
+.home-card-right {
+  flex-shrink: 0;
 }
 
-.home-card-btn { width: 100%; margin-top: 4px; }
+.home-sim-btn {
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 32px;
+  font-size: .92rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: .02em;
+  transition: opacity .15s ease, transform .12s ease, box-shadow .12s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.home-sim-btn:hover {
+  opacity: .88;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(0,0,0,.22);
+}
+
+.home-sim-btn:active {
+  transform: scale(.96);
+  box-shadow: none;
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .home-card { flex-direction: column; align-items: flex-start; padding: 20px; }
+  .home-card-right { width: 100%; }
+  .home-sim-btn { width: 100%; }
+  .home-title { font-size: 1.6rem; }
+}
 
 /* ── Back button & page title row ────────────── */
 .page-title-row {
