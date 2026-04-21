@@ -45,12 +45,14 @@ export default function MatrixInput({ onRun }) {
 
   function parseCSV(text) {
     const lines = text.trim().split('\n').filter(Boolean);
-    // skip header if first cell is non-numeric
+    // skip header row if first cell is non-numeric (e.g. "Task", "Machine1" …)
     const startRow = isNaN(parseFloat(lines[0]?.split(',')[0])) ? 1 : 0;
     const rows = lines.slice(startRow).map((line) =>
       line.split(',').map((c) => c.trim())
     );
-    return rows;
+    // skip first column if it contains non-numeric labels (e.g. "T1", "T2" …)
+    const firstColIsLabel = rows.every((r) => isNaN(parseFloat(r[0])));
+    return firstColIsLabel ? rows.map((r) => r.slice(1)) : rows;
   }
 
   function handleCSV(e) {
