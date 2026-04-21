@@ -1,8 +1,8 @@
-export default function Header() {
+export default function Header({ onLogoClick }) {
   return (
     <header className="header">
       <div className="header-inner">
-        <div className="header-logo">
+        <div className="header-logo" onClick={onLogoClick} style={{ cursor: 'pointer' }}>
           <svg width="38" height="38" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="hbg" x1="0%" y1="0%" x2="100%" y2="100%">

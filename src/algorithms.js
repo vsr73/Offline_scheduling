@@ -1,119 +1,117 @@
-/**
- * Min-Min Scheduling Algorithm
- * Assigns the task with minimum completion time first, to the resource
- * that gives it minimum completion time.
- *
- * @param {number[][]} etc - Expected Time to Compute matrix (tasks x machines)
- * @returns {object} - schedule, makespan, steps
- */
+// ── Offline Algorithms ────────────────────────────────────────────────────────
+
 export function minMin(etc) {
+  const numMachines = etc[0].length;
+  const machineAvail = new Array(numMachines).fill(0);
+  const schedule = [];
+  const steps = [];
+  const unscheduled = Array.from({ length: etc.length }, (_, i) => i);
+
+  while (unscheduled.length > 0) {
+    const mct = unscheduled.map((task) => {
+      let minTime = Infinity, minMachine = -1;
+      for (let m = 0; m < numMachines; m++) {
+        const ct = machineAvail[m] + etc[task][m];
+        if (ct < minTime) { minTime = ct; minMachine = m; }
+      }
+      return { task, machine: minMachine, ct: minTime };
+    });
+
+    const selected = mct.reduce((best, curr) => (curr.ct < best.ct ? curr : best));
+    schedule.push({ task: selected.task, machine: selected.machine, start: machineAvail[selected.machine], end: selected.ct });
+    steps.push({ iteration: schedule.length, mctTable: mct.map((m) => ({ ...m })), selected: { ...selected }, machineAvailBefore: [...machineAvail] });
+    machineAvail[selected.machine] = selected.ct;
+    unscheduled.splice(unscheduled.indexOf(selected.task), 1);
+  }
+
+  return { schedule, makespan: Math.max(...machineAvail), steps, machineAvail: [...machineAvail] };
+}
+
+export function maxMin(etc) {
+  const numMachines = etc[0].length;
+  const machineAvail = new Array(numMachines).fill(0);
+  const schedule = [];
+  const steps = [];
+  const unscheduled = Array.from({ length: etc.length }, (_, i) => i);
+
+  while (unscheduled.length > 0) {
+    const mct = unscheduled.map((task) => {
+      let minTime = Infinity, minMachine = -1;
+      for (let m = 0; m < numMachines; m++) {
+        const ct = machineAvail[m] + etc[task][m];
+        if (ct < minTime) { minTime = ct; minMachine = m; }
+      }
+      return { task, machine: minMachine, ct: minTime };
+    });
+
+    const selected = mct.reduce((best, curr) => (curr.ct > best.ct ? curr : best));
+    schedule.push({ task: selected.task, machine: selected.machine, start: machineAvail[selected.machine], end: selected.ct });
+    steps.push({ iteration: schedule.length, mctTable: mct.map((m) => ({ ...m })), selected: { ...selected }, machineAvailBefore: [...machineAvail] });
+    machineAvail[selected.machine] = selected.ct;
+    unscheduled.splice(unscheduled.indexOf(selected.task), 1);
+  }
+
+  return { schedule, makespan: Math.max(...machineAvail), steps, machineAvail: [...machineAvail] };
+}
+
+// ── Online Algorithms ─────────────────────────────────────────────────────────
+
+/**
+ * MCT — Minimum Completion Time (Online)
+ * Each arriving task is immediately assigned to the machine with the
+ * smallest completion time (availability + ETC).
+ */
+export function mct(etc) {
   const numTasks = etc.length;
   const numMachines = etc[0].length;
   const machineAvail = new Array(numMachines).fill(0);
   const schedule = [];
   const steps = [];
-  const unscheduled = Array.from({ length: numTasks }, (_, i) => i);
 
-  while (unscheduled.length > 0) {
-    // Compute MCT for each unscheduled task
-    const mct = unscheduled.map((task) => {
-      let minTime = Infinity;
-      let minMachine = -1;
-      for (let m = 0; m < numMachines; m++) {
-        const ct = machineAvail[m] + etc[task][m];
-        if (ct < minTime) {
-          minTime = ct;
-          minMachine = m;
-        }
-      }
-      return { task, machine: minMachine, ct: minTime };
-    });
+  for (let task = 0; task < numTasks; task++) {
+    const ctList = Array.from({ length: numMachines }, (_, m) => ({
+      machine: m,
+      avail: machineAvail[m],
+      execTime: etc[task][m],
+      ct: machineAvail[m] + etc[task][m],
+    }));
 
-    // Find the task with minimum MCT
-    const selected = mct.reduce((best, curr) => (curr.ct < best.ct ? curr : best));
+    const selected = ctList.reduce((best, curr) => (curr.ct < best.ct ? curr : best));
 
-    schedule.push({
-      task: selected.task,
-      machine: selected.machine,
-      start: machineAvail[selected.machine],
-      end: selected.ct,
-    });
-
-    steps.push({
-      iteration: schedule.length,
-      mctTable: mct.map((m) => ({ ...m })),
-      selected: { ...selected },
-      machineAvailBefore: [...machineAvail],
-    });
-
+    schedule.push({ task, machine: selected.machine, start: machineAvail[selected.machine], end: selected.ct });
+    steps.push({ iteration: task + 1, task, ctList: ctList.map((c) => ({ ...c })), selected: { ...selected }, machineAvailBefore: [...machineAvail] });
     machineAvail[selected.machine] = selected.ct;
-    unscheduled.splice(unscheduled.indexOf(selected.task), 1);
   }
 
-  return {
-    schedule,
-    makespan: Math.max(...machineAvail),
-    steps,
-    machineAvail: [...machineAvail],
-  };
+  return { schedule, makespan: Math.max(...machineAvail), steps, machineAvail: [...machineAvail] };
 }
 
 /**
- * Max-Min Scheduling Algorithm
- * Assigns the task with maximum completion time first, to the resource
- * that gives it minimum completion time.
- *
- * @param {number[][]} etc - Expected Time to Compute matrix (tasks x machines)
- * @returns {object} - schedule, makespan, steps
+ * MET — Minimum Execution Time (Online)
+ * Each arriving task is immediately assigned to the machine with the
+ * smallest ETC value, ignoring current machine availability.
  */
-export function maxMin(etc) {
+export function met(etc) {
   const numTasks = etc.length;
   const numMachines = etc[0].length;
   const machineAvail = new Array(numMachines).fill(0);
   const schedule = [];
   const steps = [];
-  const unscheduled = Array.from({ length: numTasks }, (_, i) => i);
 
-  while (unscheduled.length > 0) {
-    // Compute MCT for each unscheduled task
-    const mct = unscheduled.map((task) => {
-      let minTime = Infinity;
-      let minMachine = -1;
-      for (let m = 0; m < numMachines; m++) {
-        const ct = machineAvail[m] + etc[task][m];
-        if (ct < minTime) {
-          minTime = ct;
-          minMachine = m;
-        }
-      }
-      return { task, machine: minMachine, ct: minTime };
-    });
+  for (let task = 0; task < numTasks; task++) {
+    const etcList = Array.from({ length: numMachines }, (_, m) => ({
+      machine: m,
+      avail: machineAvail[m],
+      execTime: etc[task][m],
+      ct: machineAvail[m] + etc[task][m],
+    }));
 
-    // Find the task with MAXIMUM MCT
-    const selected = mct.reduce((best, curr) => (curr.ct > best.ct ? curr : best));
+    const selected = etcList.reduce((best, curr) => (curr.execTime < best.execTime ? curr : best));
 
-    schedule.push({
-      task: selected.task,
-      machine: selected.machine,
-      start: machineAvail[selected.machine],
-      end: selected.ct,
-    });
-
-    steps.push({
-      iteration: schedule.length,
-      mctTable: mct.map((m) => ({ ...m })),
-      selected: { ...selected },
-      machineAvailBefore: [...machineAvail],
-    });
-
+    schedule.push({ task, machine: selected.machine, start: machineAvail[selected.machine], end: selected.ct });
+    steps.push({ iteration: task + 1, task, ctList: etcList.map((c) => ({ ...c })), selected: { ...selected }, machineAvailBefore: [...machineAvail] });
     machineAvail[selected.machine] = selected.ct;
-    unscheduled.splice(unscheduled.indexOf(selected.task), 1);
   }
 
-  return {
-    schedule,
-    makespan: Math.max(...machineAvail),
-    steps,
-    machineAvail: [...machineAvail],
-  };
+  return { schedule, makespan: Math.max(...machineAvail), steps, machineAvail: [...machineAvail] };
 }

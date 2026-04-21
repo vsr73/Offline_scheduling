@@ -7,7 +7,8 @@ function buildMatrix(rows, cols, fill = '') {
   return Array.from({ length: rows }, () => Array(cols).fill(fill));
 }
 
-export default function MatrixInput({ onRun }) {
+export default function MatrixInput({ onRun, algoLabels }) {
+  const labels = algoLabels || { minmin: 'Min-Min', maxmin: 'Max-Min', both: 'Both' };
   const [numTasks, setNumTasks] = useState(DEFAULT_TASKS);
   const [numMachines, setNumMachines] = useState(DEFAULT_MACHINES);
   const [matrix, setMatrix] = useState(() => buildMatrix(DEFAULT_TASKS, DEFAULT_MACHINES, ''));
@@ -197,7 +198,7 @@ export default function MatrixInput({ onRun }) {
               type="radio" name="algo" value={a}
               checked={algo === a} onChange={() => setAlgo(a)}
             />
-            {a === 'minmin' ? 'Min-Min' : a === 'maxmin' ? 'Max-Min' : 'Both'}
+            {labels[a]}
           </label>
         ))}
       </div>
