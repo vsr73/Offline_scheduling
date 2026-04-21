@@ -30,13 +30,6 @@ export default function App() {
       <main className="main">
         <div className="page-title">
           <h1>Min-Min &amp; Max-Min Offline Scheduling</h1>
-          <div className="calc-display">
-            <span className="calc-token">Tasks</span>
-            <span className="calc-op">×</span>
-            <span className="calc-token">Machines</span>
-            <span className="calc-op">→</span>
-            <span className="calc-result">Optimal Schedule</span>
-          </div>
         </div>
 
         <AlgorithmInfo />
