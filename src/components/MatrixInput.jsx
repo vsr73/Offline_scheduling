@@ -13,6 +13,7 @@ export default function MatrixInput({ onRun }) {
   const [matrix, setMatrix] = useState(() => buildMatrix(DEFAULT_TASKS, DEFAULT_MACHINES, ''));
   const [algo, setAlgo] = useState('both');
   const [error, setError] = useState('');
+  const [running, setRunning] = useState(false);
   const fileRef = useRef();
 
   function resizeMatrix(newTasks, newMachines) {
@@ -95,8 +96,12 @@ export default function MatrixInput({ onRun }) {
     const err = validate();
     if (err) { setError(err); return; }
     setError('');
-    const etc = matrix.map((row) => row.map((c) => parseFloat(c)));
-    onRun({ etc, algo });
+    setRunning(true);
+    setTimeout(() => {
+      const etc = matrix.map((row) => row.map((c) => parseFloat(c)));
+      onRun({ etc, algo });
+      setRunning(false);
+    }, 320);
   }
 
   function loadExample() {
@@ -199,8 +204,13 @@ export default function MatrixInput({ onRun }) {
 
       {error && <p className="error-msg">{error}</p>}
 
-      <button className="btn-primary" onClick={handleRun}>
-        Run Scheduling
+      <button className="btn-primary" onClick={handleRun} disabled={running}>
+        {running ? (
+          <span className="btn-spinner-row">
+            <span className="btn-spinner" />
+            Computing…
+          </span>
+        ) : 'Run Scheduling'}
       </button>
     </section>
   );
