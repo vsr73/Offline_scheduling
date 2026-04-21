@@ -61,7 +61,37 @@ body { min-height: 100vh; background: #f3f4f6; }
 /* ── Page title ─────────────────────────────── */
 .page-title { text-align: center; }
 .page-title h1 { font-size: 1.75rem; font-weight: 800; color: #111827; }
-.page-subtitle { margin-top: 6px; color: #6b7280; font-size: .9rem; }
+.calc-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 10px;
+  padding: 8px 20px;
+  font-family: 'Courier New', monospace;
+}
+
+.calc-token {
+  font-size: .88rem;
+  font-weight: 600;
+  color: #93c5fd;
+  letter-spacing: .03em;
+}
+
+.calc-op {
+  font-size: 1rem;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.calc-result {
+  font-size: .88rem;
+  font-weight: 700;
+  color: #34d399;
+  letter-spacing: .03em;
+}
 
 /* ── Cards ───────────────────────────────────── */
 .card {
@@ -460,4 +490,96 @@ body { min-height: 100vh; background: #f3f4f6; }
   padding: 16px;
   font-size: .78rem;
   color: #9ca3af;
+}
+
+/* ── Responsive — tablet (≤768px) ───────────── */
+@media (max-width: 768px) {
+  .main { padding: 16px 12px 40px; gap: 16px; }
+
+  .page-title h1 { font-size: 1.35rem; }
+
+  .calc-display {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px;
+    font-size: .82rem;
+  }
+
+  .card { padding: 16px; }
+  .info-body { padding: 14px; }
+
+  .card-header { flex-direction: column; align-items: flex-start; }
+  .card-header-actions { width: 100%; }
+  .card-header-actions .btn-outline,
+  .card-header-actions a.btn-outline { flex: 1; text-align: center; }
+
+  .dim-row { gap: 14px; }
+
+  .matrix-cell { width: 52px; font-size: .85rem; }
+  .matrix-table th { min-width: 52px; padding: 6px 6px; font-size: .8rem; }
+  .matrix-row-label { padding: 6px 6px; font-size: .8rem; }
+
+  .algo-selector { gap: 12px; }
+
+  .btn-primary { width: 100%; padding: 12px; font-size: 1rem; }
+
+  .result-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .result-header h2 { font-size: 1rem; }
+  .makespan-badge { width: 100%; }
+
+  .assign-table th,
+  .assign-table td { padding: 6px 8px; font-size: .8rem; }
+
+  .util-item { grid-template-columns: 32px 1fr 42px; gap: 6px; }
+  .util-machine-label { font-size: .75rem; }
+  .util-pct { font-size: .75rem; }
+
+  .step-card { padding: 10px 10px; }
+  .avail-chip { font-size: .7rem; }
+
+  .info-toggle { padding: 12px 14px; font-size: .88rem; }
+}
+
+/* ── Responsive — mobile (≤480px) ───────────── */
+@media (max-width: 480px) {
+  :root { font-size: 14px; }
+
+  .header-inner { padding: 0 12px; height: 52px; }
+  .header-title { font-size: 1rem; }
+  .header-logo svg { width: 30px; height: 30px; }
+
+  .page-title h1 { font-size: 1.15rem; }
+
+  .calc-display { font-size: .75rem; gap: 5px; padding: 7px 10px; }
+
+  .card { padding: 14px 12px; border-radius: 10px; }
+
+  .card-header-actions { flex-direction: column; }
+  .card-header-actions .btn-outline,
+  .card-header-actions a.btn-outline { width: 100%; }
+
+  .matrix-cell { width: 44px; font-size: .8rem; padding: 4px 2px; }
+  .matrix-table th { min-width: 44px; padding: 5px 4px; font-size: .75rem; }
+  .matrix-row-label { padding: 5px 4px; font-size: .75rem; }
+
+  .algo-selector { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+  .results-grid { gap: 14px; }
+
+  .assign-table th,
+  .assign-table td { padding: 5px 6px; font-size: .75rem; }
+
+  .step-table th,
+  .step-table td { padding: 4px 6px; font-size: .75rem; }
+
+  .gantt-legend { gap: 6px; }
+  .legend-item { font-size: .72rem; }
+
+  .util-item { grid-template-columns: 28px 1fr 38px; gap: 5px; }
+
+  .info-block h3 { font-size: .88rem; }
+  .info-block p,
+  .info-block ol { font-size: .78rem; }
+  .info-note { font-size: .76rem; }
 }
