@@ -21,9 +21,9 @@ export default function GanttChart({ schedule, numMachines, numTasks }) {
     <div className="gantt-wrapper">
       <div className="gantt-scroll">
         <svg
-          width={LABEL_W + CHART_W + 20}
-          height={numMachines * ROW_H + 40}
-          style={{ display: 'block' }}
+          viewBox={`0 0 ${LABEL_W + CHART_W + 20} ${numMachines * ROW_H + 40}`}
+          width="100%"
+          style={{ display: 'block', minWidth: 280 }}
         >
           {/* axis ticks */}
           {Array.from(
@@ -50,7 +50,7 @@ export default function GanttChart({ schedule, numMachines, numTasks }) {
             <g key={m}>
               <rect
                 x={0} y={m * ROW_H}
-                width={LABEL_W + CHART_W + 20} height={ROW_H}
+                width="100%" height={ROW_H}
                 fill={m % 2 === 0 ? '#f9fafb' : '#ffffff'}
               />
               <text
